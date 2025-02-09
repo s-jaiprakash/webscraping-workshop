@@ -3,71 +3,354 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Web Scraping Workshop: Learn data extraction with Python, BeautifulSoup, and Selenium">
     <title>Web Scraping Workshop</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-bg: #1a1a1a;
+            --card-bg: #333;
+            --text-color: #fff;
+            --accent-color: #f5c518;
+            --accent-hover: #d4a017;
+            --nav-bg: rgba(26, 26, 26, 0.95);
+        }
+
         body {
-            background-color: #1a1a1a;
-            color: #fff;
-            text-align: center;
-            font-family: Arial, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            scroll-padding-top: 80px;
         }
+
         .container {
-            margin-top: 50px;
+            margin-top: 5rem;
+            padding-bottom: 2rem;
         }
-        .card {
-            background-color: #333;
-            color: #fff;
-            border-radius: 10px;
+
+        .navbar {
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
-        .btn-custom {
-            background-color: #f5c518;
-            color: #000;
+
+        .nav-link {
+            color: var(--text-color) !important;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color) !important;
+        }
+
+        .nav-link.active {
+            color: var(--accent-color) !important;
             font-weight: bold;
         }
+
+        .card {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-custom {
+            background-color: var(--accent-color);
+            color: #000;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
         .btn-custom:hover {
-            background-color: #d4a017;
+            background-color: var(--accent-hover);
+            transform: scale(1.05);
+        }
+
+        .section-title {
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .assignment-list {
+            text-align: left;
+            padding-left: 1.5rem;
+        }
+
+        .emoji-icon {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .section-link {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            color: var(--accent-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .card:hover .section-link {
+            opacity: 1;
+        }
+
+        .section-link:hover {
+            color: var(--accent-hover);
+            text-decoration: none;
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, var(--accent-color) var(--scroll), transparent 0);
+            z-index: 1001;
+        }
+
+        .section-anchor {
+            display: block;
+            position: relative;
+            top: -80px;
+            visibility: hidden;
+        }
+
+        .link-icon {
+            font-size: 1.2rem;
+            margin-left: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 4rem;
+            }
+            .section-link {
+                opacity: 1;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="scroll-progress"></div>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="#">🎬 Workshop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#morning">Morning Session</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#afternoon">Afternoon Session</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#assignments">Assignments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#project">Project</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
-        <h1 class="display-4">🎬 Welcome to the Web Scraping Workshop!</h1>
-        <p class="lead">Unlock the power of data extraction with Python, BeautifulSoup, and Selenium.</p>
-        
-        <div class="row mt-4">
+        <header class="text-center mb-5">
+            <h1 class="display-4">🎬 Web Scraping Workshop</h1>
+            <p class="lead">Master data extraction with Python, BeautifulSoup, and Selenium</p>
+        </header>
+
+        <span id="morning" class="section-anchor"></span>
+        <section class="row" data-section="morning">
             <div class="col-md-6">
-                <div class="card p-3">
-                    <h3>🎭 Morning Session</h3>
-                    <a href="webscraping_introduction.html" class="btn btn-custom m-2">Introduction to Web Scraping</a>
-                    <a href="html_and_css.html" class="btn btn-custom m-2">HTML & CSS Basics</a>
+                <div class="card p-4">
+                    <a class="section-link" title="Copy link to section">
+                        🔗 <span class="link-icon">§</span>
+                    </a>
+                    <h2 class="section-title"><span class="emoji-icon">🌅</span>Morning Session</h2>
+                    <div class="d-grid gap-3">
+                        <a href="/workshop/intro" class="btn btn-custom">Introduction to Web Scraping</a>
+                        <a href="/workshop/html-css" class="btn btn-custom">HTML & CSS Fundamentals</a>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card p-3">
-                    <h3>📜 Workshop Notebooks</h3>
-                    <a href="https://colab.research.google.com/drive/1WTl7n1VprvJCRsNDgB_hmxKGtVXx32U4?usp=sharing" class="btn btn-custom m-2 disabled" target="_blank">Working Notebook</a>
-                    <a href="https://colab.research.google.com/drive/1kg_yhyRVNBgA5ptZtrNsCXUrs39sd5P7?usp=sharing" class="btn btn-custom m-2" target="_blank">Student Notebook</a>
+                <div class="card p-4">
+                    <h2 class="section-title"><span class="emoji-icon">📓</span>Morning Notebooks</h2>
+                    <div class="d-grid gap-3">
+                        <a href="https://colab.research.google.com/drive/1WTl7n1VprvJCRsNDgB_hmxKGtVXx32U4" class="btn btn-custom disabled" target="_blank">Instructor Notebook</a>
+                        <a href="https://colab.research.google.com/drive/1kg_yhyRVNBgA5ptZtrNsCXUrs39sd5P7" class="btn btn-custom" target="_blank">Student Notebook</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="row mt-4">
+        </section>
+
+        <span id="afternoon" class="section-anchor"></span>
+        <section class="row mt-4" data-section="afternoon">
             <div class="col-md-6">
-                <div class="card p-3">
-                    <h3>🎭 After Session</h3>
-                    <a href="session_sentiment_analysis.html" class="btn btn-custom m-2">Introduction to Web Scraping</a>
+                <div class="card p-4">
+                    <a class="section-link" title="Copy link to section">
+                        🔗 <span class="link-icon">§</span>
+                    </a>
+                    <h2 class="section-title"><span class="emoji-icon">🎭</span>Afternoon Session</h2>
+                    <div class="d-grid gap-3">
+                        <a href="/workshop/sentiment" class="btn btn-custom">Sentiment Analysis Workshop</a>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card p-3">
-                    <h3>📜 Workshop Notebooks</h3>
-                    <a href="https://colab.research.google.com/drive/1SpHfYCgXb7MQm2mQZBtZ3gXSNzRBpABN?usp=sharing" class="btn btn-custom m-2" target="_blank">Working Notebook</a>
+                <div class="card p-4">
+                    <h2 class="section-title"><span class="emoji-icon">📓</span>Afternoon Notebooks</h2>
+                    <div class="d-grid gap-3">
+                        <a href="https://colab.research.google.com/drive/1SpHfYCgXb7MQm2mQZBtZ3gXSNzRBpABN" class="btn btn-custom disabled" target="_blank">Instructor Notebook</a>
+                        <a href="https://colab.research.google.com/drive/1FgGRRYu1nFHARNK-bXdn9G7RNYiI8l8J" class="btn btn-custom" target="_blank">Student Notebook</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <span id="assignments" class="section-anchor"></span>
+        <section class="row mt-4" data-section="assignments">
+            <div class="col-12">
+                <div class="card p-4">
+                    <a class="section-link" title="Copy link to section">
+                        🔗 <span class="link-icon">§</span>
+                    </a>
+                    <h2 class="section-title"><span class="emoji-icon">📝</span>Mandatory Assignment</h2>
+                    <div class="assignment-list">
+                        <h3>1. Web Scraping Assignment</h3>
+                        <ul>
+                            <li>Complete the exercises in the student notebook</li>
+                            <li>Implement basic web scraping techniques using BeautifulSoup</li>
+                        </ul>
+
+                        <h3>2. Movie Review Sentiment Analysis</h3>
+                        <ul>
+                            <li>Scrape IMDb for movie reviews (minimum 10 reviews) using BeautifulSoup</li>
+                            <li>Create a detailed user persona including:
+                                <ul>
+                                    <li>Preferred movie genres and characteristics</li>
+                                    <li>Movie preferences and dislikes</li>
+                                    <li>Viewing habits and criteria</li>
+                                </ul>
+                            </li>
+                            <li>Document your analysis prompts in the notebook</li>
+                            <li>Include LLM (OpenAI or Gemini) responses and analysis</li>
+                        </ul>
+
+                        <h3>3. Advanced Selenium Scraping</h3>
+                        <ul>
+                            <li>Develop a Selenium script to:
+                                <ul>
+                                    <li>Navigate to the IMDb review page</li>
+                                    <li>Implement explicit waits for the "All" button</li>
+                                    <li>Create an infinite scroll implementation</li>
+                                    <li>Extract comprehensive review data</li>
+                                    <li>Handle error cases and timeouts</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <span id="project" class="section-anchor"></span>
+        <section class="row mt-4" data-section="project">
+            <div class="col-12">
+                <div class="card p-4">
+                    <a class="section-link" title="Copy link to section">
+                        🔗 <span class="link-icon">§</span>
+                    </a>
+                    <h2 class="section-title"><span class="emoji-icon">🚀</span>Optional Project</h2>
+                    <h3>Personalized Movie Recommendation System</h3>
+                    <div class="assignment-list">
+                        <ul>
+                            <li>Build an LLM-powered recommendation engine using OpenAI or Gemini</li>
+                            <li>Scrape IMDb for movie data and reviews</li>
+                            <li>Implement user preference collection and analysis</li>
+                            <li>Create a scoring system for movie recommendations using LLM</li>
+                            <li>Generate personalized movie suggestions with explanations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Update scroll progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.scroll-progress').style.setProperty('--scroll', `${scrolled}%`);
+        });
+
+        // Intersection Observer for sections
+        const sections = document.querySelectorAll('section[data-section]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        const observerOptions = {
+            root: null,
+            threshold: 0.2,
+            rootMargin: '-80px 0px -20% 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const sectionId = entry.target.getAttribute('data-section');
+                    // Update navigation
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                    // Update URL without scrolling
+                    history.replaceState(null, null, `#${sectionId}`);
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => observer.observe(section));
+
+        // Handle section link clicks
+        document.querySelectorAll('.section-link').forEach(link => {
+            link.addEventListener('click', () => {
+                const sectionId = link.closest('section').getAttribute('data-section');
+                const url = window.location.origin + window.location.pathname + '#' + sectionId;
+                navigator.clipboard.writeText(url)
+                    .then(() => {
+                        const originalText = link.innerHTML;
+                        link.innerHTML = '✓ Copied!';
+                        setTimeout(() => {
+                            link.innerHTML = originalText;
+                        }, 2000);
+                    })
+                    .catch(err => console.error('Failed to copy:', err));
+            });
+        });
+    </script>
 </body>
 </html>
